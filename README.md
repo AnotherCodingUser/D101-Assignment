@@ -25,11 +25,11 @@ The follwowing arguments are valid to use with this project:
 
 | */app* Folder | Functionality |
 | - | - |
-| [App.xaml](\app\App.xaml)  ([App.xaml.cs](\app\\App.xaml.cs))  | WPF Project core functionality |
-| [classes.cs](\app\classes.cs) | Contains all Classes and methods used by both CLI and WPF |
-| [MainWindow.xaml](\app\MainWindow.xaml) <br> ([MainWindow.xaml.cs](\app\)MainWindow.xaml.cs)) | WPF files for the GUI portion of the project | 
-| [/stores](\stores) | Folder used to store files for the CLI portion of the application |
-| [/CLI/cli.cs](\app\CLI\cli.cs) | Main file used to run the CLI portion of the project |
+| [App.xaml](app\App.xaml)  ([App.xaml.cs](app\\App.xaml.cs))  | WPF Project core functionality |
+| [classes.cs](app\classes.cs) | Contains all Classes and methods used by both CLI and WPF |
+| [MainWindow.xaml](app\MainWindow.xaml) <br> ([MainWindow.xaml.cs](app\)MainWindow.xaml.cs)) | WPF files for the GUI portion of the project | 
+| [/stores](stores) | Folder used to store files for the CLI portion of the application |
+| [/CLI/cli.cs](app\CLI\cli.cs) | Main file used to run the CLI portion of the project |
 
 
 
@@ -46,7 +46,7 @@ The ID's of Todo and Category Classes both have auto incrimental methods inside 
 
 ### CLI 
 To run the CLI run the project with the argument `cli` like `dotnet run cli`.
-The application will Automatically load any existing TaskItem's or Category's from the `app/stores` folder
+The application will Automatically load any existing TaskItem's or Category's from the `app\stores` folder
 Once the application is loaded and running a textbased menu will appear with your options to List, Delete, and Create TaskItem or Category objects. You also have the option to save the current Category's and TaskItem's to your computers disk.
 
 **PLEASE NOTE THAT EXITING THE APPLICATION WITHOUT SAVING WILL RESULT IN A LOSS OF ALL CHANGES DONE INSIDE THE CLI APPLICATION**
