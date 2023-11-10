@@ -1,0 +1,135 @@
+﻿<!-- https://learn.microsoft.com/en-us/dotnet/desktop/wpf/data/binding-sources-overview?view=netframeworkdesktop-4.8#using-collection-objects-as-a-binding-source -->
+<Window x:Class="wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Classes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="1200">
+    <!-- Import namspace -->
+    <Window.Resources>
+        <!-- Import conversion methods for my datagrid date to string, and array to string -->
+        <local:DateConverter x:Key="DateConverter" />
+        <local:StringArrayToStringConverter x:Key="StringArrayToStringConverter" />
+    </Window.Resources>
+    <!-- Create Grid layout for the wpf app -->
+    <Grid Margin="30">
+        <!-- define dimentions for the rows -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="180" />
+            <RowDefinition Height="200" />
+        </Grid.RowDefinitions>
+        <!-- define dimentions for the columns -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <!-- Create a Listbox in the first row of the first column with the source bound via the mainwindow.xaml.cs file -->
+        <ListBox ItemsSource="{Binding}" Grid.Row="0" Grid.Column="0" x:Name="CategoryDataList" SelectionChanged="CategoryDataList_SelectionChanged" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!-- each row is formatted so ID and CategoryTitle are displayed in the same Cell/Row in the List -->
+                    <TextBlock>
+                       <Run Text="{Binding ID}"></Run>
+                       <Run Text="{Binding CategoryTitle}"></Run>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!-- Create a stackpanel in the second row of the first column to neatly format the Category Contorls -->
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <!-- Make a label for the Category -->
+            <Label Grid.Row="1" Grid.Column="0">Category Title</Label>
+            <!-- Make a Textbox to to Alter the category title -->
+            <TextBox x:Name="CategoryTxt" Margin="5"/>
+            <!-- Buttons for categorie control -->
+            <Button x:Name="AddCatBtn" Content="Add Category"  Click="AddCatBtn_Click" Margin="5"/>
+            <Button x:Name="LoadCatBtn" Content="Load Categories" Click="LoadCatBtn_Click" Margin="5"/>
+            <Button x:Name="SaveCatBtn" Content="Save Categories" Margin="5" Click="SaveCatBtn_Click"/>
+            <Button x:Name="EditCatBtn" Content="Edit Category" Margin="5" Click="EditCatBtn_Click"/>
+            <Button x:Name="DeleteCatBtn" Content="Delete Category" Margin="5" Click="DeleteCatBtn_Click"/>
+        </StackPanel>
+        <!-- Datagrid for listing my task items, displayed the first row, second column -->
+        <DataGrid x:Name="TaskListGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" Grid.Column="1" Margin="30,0,0,0" SelectionChanged="TaskListGrid_SelectionChanged" RowHeight="25">
+            <DataGrid.Columns>
+                <!-- Define my columns for the datagrid-->
+                <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="30" IsReadOnly="True"/> <!--Set to read ony so user can not modify task ID's-->
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="80"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="260"/>
+                <DataGridCheckBoxColumn Header="Completed?" Binding="{Binding CompletedFlag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/> <!--Bool updating logic for the TaskItem-->
+                <DataGridTemplateColumn Header="Due Date" Width="120">
+                    <!--Create a template to display date, and control the editing method-->
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!--Bind the date for displaying-->
+                            <TextBlock Text="{Binding DueDate}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <!-- Create the date picker which is also bound to the Date when editing the date, using the DateConverter Method-->
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding DueDate, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <!-- Labels are displayed by using the StringArrayToStringConverter method to convert a String array into a single string to display -->
+                <DataGridTextColumn Header="Labels" Binding="{Binding Labels, Mode=TwoWay, Converter={StaticResource StringArrayToStringConverter}}" Width="120"/>
+                <!-- Create a combo box with predefined options of Low, Medium, High-->
+                <DataGridComboBoxColumn Header="Priority" SelectedValueBinding="{Binding Priority, Mode=TwoWay}" Width="100">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource">
+                                <Setter.Value>
+                                    <x:Array Type="{x:Type sys:String}">
+                                        <sys:String>Low</sys:String>
+                                        <sys:String>Medium</sys:String>
+                                        <sys:String>High</sys:String>
+                                    </x:Array>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource">
+                                <Setter.Value>
+                                    <x:Array Type="{x:Type sys:String}">
+                                        <sys:String>Low</sys:String>
+                                        <sys:String>Medium</sys:String>
+                                        <sys:String>High</sys:String>
+                                    </x:Array>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <!-- Define Category ID column to not be editable as a button controls binding for the Tasks Category binding-->
+                <DataGridTextColumn Header="Category ID" Binding="{Binding CategoryID}" Width="*" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!-- create a subgrid for the TaskList Datagrid controls -->
+        <Grid Height="150" Width="360" Grid.Row="1" Grid.Column="1" Margin="20">
+            <!--Create row definitions-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+
+            </Grid.RowDefinitions>
+            <!--Create Column definintions-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- Create record, exporting and loading control buttonss-->
+            <Button x:Name="LoadTaskBtn" Content="Load Task List" Width="150px" Margin="6" Click="LoadTaskBtn_Click" Grid.Column="0" Grid.Row="0"/>
+            <Button x:Name="AddTaskBtn" Content="Add Task" Width="150px" Margin="6" Click="AddTaskBtn_Click"  Grid.Column="0" Grid.Row="1"/>
+            <Button x:Name="MakeMarkdownBtn" Content="Export to Markdown File" Width="150px" Margin="6" Grid.Column="0" Grid.Row="2" Click="MakeMarkdownBtn_Click"/>
+            <Button x:Name="DeleteTaskBtn" Content="Delete Task" Width="150px" Margin="6" Click="DeleteTaskBtn_Click"  Grid.Column="1" Grid.Row="1"/>
+            <Button x:Name="LinkTaskCategoryBtn" Content="Add Task to Category" Width="150px" Margin="6" Click="LinkTaskCategoryBtn_Click"  Grid.Column="1" Grid.Row="2"/>
+            <Button x:Name="SaveTaskListBtn" Content="Save Task List" Width="150px"  Margin="6"  Grid.Column="1" Grid.Row="0" Click="SaveTaskListBtn_Click"/>
+        </Grid>
+    </Grid>
+</Window>
