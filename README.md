@@ -25,11 +25,11 @@ The follwowing arguments are valid to use with this project:
 
 | */app* Folder | Functionality |
 | - | - |
-| [App.xaml](app\App.xaml)  ([App.xaml.cs](app\App.xaml.cs))  | WPF Project core functionality |
-| [classes.cs](app\classes.cs) | Contains all Classes and methods used by both CLI and WPF |
-| [MainWindow.xaml](app\MainWindow.xaml) <br> ([MainWindow.xaml.cs](app\)MainWindow.xaml.cs)) | WPF files for the GUI portion of the project | 
+| [App.xaml](app/App.xaml)  ([App.xaml.cs](app/App.xaml.cs))  | WPF Project core functionality |
+| [classes.cs](app/classes.cs) | Contains all Classes and methods used by both CLI and WPF |
+| [MainWindow.xaml](app/MainWindow.xaml) <br> ([MainWindow.xaml.cs](app/MainWindow.xaml.cs)) | WPF files for the GUI portion of the project | 
 | [/stores](stores) | Folder used to store files for the CLI portion of the application |
-| [/CLI/cli.cs](app\CLI\cli.cs) | Main file used to run the CLI portion of the project |
+| [/CLI/cli.cs](app/CLI/cli.cs) | Main file used to run the CLI portion of the project |
 
 
 
